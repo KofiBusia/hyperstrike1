@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>Hyper Strike</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <canvas id="game-canvas"></canvas>
+
+  <!-- ============ MAIN MENU ============ -->
+  <div id="main-menu" class="screen">
+    <div class="menu-panel">
+      <h1 class="game-title">HYPER<span>STRIKE</span></h1>
+      <p class="tagline">Run. Climb. Fight. Build.</p>
+
+      <div class="name-row">
+        <label for="player-name-input">Callsign</label>
+        <input id="player-name-input" maxlength="16" placeholder="Guest" />
+      </div>
+
+      <div class="menu-nav">
+        <button class="menu-btn primary" data-nav="play">Play</button>
+        <button class="menu-btn" data-nav="locker">Locker</button>
+        <button class="menu-btn" data-nav="settings">Settings</button>
+      </div>
+
+      <div class="profile-strip">
+        <div class="profile-level">Lv. <span id="profile-level">1</span></div>
+        <div class="xp-bar-outer"><div id="profile-xp-bar" class="xp-bar-inner"></div></div>
+        <div class="profile-coins">🪙 <span id="profile-coins">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODE SELECT ============ -->
+  <div id="mode-select" class="screen hidden">
+    <div class="menu-panel">
+      <h2>Select Game Mode</h2>
+      <div class="mode-grid">
+        <button class="mode-card" data-mode="team_deathmatch">
+          <h3>Team Deathmatch</h3>
+          <p>2 teams. First to the score limit wins.</p>
+        </button>
+        <button class="mode-card" data-mode="free_for_all">
+          <h3>Free-for-All</h3>
+          <p>Every operative for themself.</p>
+        </button>
+        <button class="mode-card" data-mode="battle_royale">
+          <h3>Battle Royale</h3>
+          <p>Shrinking zone. No respawns. Last one standing.</p>
+        </button>
+        <button class="mode-card" data-mode="parkour_race">
+          <h3>Parkour Race</h3>
+          <p>No guns. Pure movement. Beat the clock.</p>
+        </button>
+      </div>
+      <button class="menu-btn back-btn" data-nav="main">Back</button>
+    </div>
+  </div>
+
+  <!-- ============ LOCKER ============ -->
+  <div id="locker" class="screen hidden">
+    <div class="menu-panel wide">
+      <h2>Locker</h2>
+      <div class="locker-tabs">
+        <button class="locker-tab active" data-cat="outfit">Outfits</button>
+        <button class="locker-tab" data-cat="weaponSkin">Weapon Skins</button>
+        <button class="locker-tab" data-cat="trail">Parkour Trails</button>
+        <button class="locker-tab" data-cat="emote">Emotes</button>
+      </div>
+      <div id="locker-grid" class="locker-grid"></div>
+      <button class="menu-btn back-btn" data-nav="main">Back</button>
+    </div>
+  </div>
+
+  <!-- ============ SETTINGS ============ -->
+  <div id="settings" class="screen hidden">
+    <div class="menu-panel wide">
+      <h2>Settings</h2>
+      <div class="locker-tabs">
+        <button class="locker-tab settings-tab active" data-settings-tab="display">Display</button>
+        <button class="locker-tab settings-tab" data-settings-tab="controls">Controls</button>
+      </div>
+
+      <div id="settings-panel-display" class="settings-panel">
+        <div class="settings-row">
+          <label>Mouse Sensitivity</label>
+          <input type="range" id="sens-slider" min="0.2" max="3" step="0.05" value="1" />
+          <span id="sens-value">1.00</span>
+        </div>
+        <div class="settings-row">
+          <label>Field of View</label>
+          <input type="range" id="fov-slider" min="70" max="110" step="1" value="90" />
+          <span id="fov-value">90</span>
+        </div>
+        <div class="settings-row">
+          <label>Master Volume</label>
+          <input type="range" id="vol-slider" min="0" max="1" step="0.05" value="0.6" />
+          <span id="vol-value">0.60</span>
+        </div>
+        <div class="settings-row">
+          <label>Graphics Quality</label>
+          <select id="graphics-select">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label>Invert Look Y</label>
+          <input type="checkbox" id="invert-y-toggle" />
+        </div>
+      </div>
+
+      <div id="settings-panel-controls" class="settings-panel hidden">
+        <div class="settings-row">
+          <label>Sprint Mode</label>
+          <select id="sprint-mode-select">
+            <option value="hold">Hold</option>
+            <option value="toggle">Toggle</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label>Crouch Mode</label>
+          <select id="crouch-mode-select">
+            <option value="hold">Hold</option>
+            <option value="toggle">Toggle</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label>Aim Mode</label>
+          <select id="aim-mode-select">
+            <option value="hold">Hold</option>
+            <option value="toggle">Toggle</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label>Force Mobile Controls</label>
+          <input type="checkbox" id="force-mobile-toggle" />
+        </div>
+        <div class="settings-row">
+          <label>Mobile Control Size</label>
+          <input type="range" id="control-size-slider" min="0.7" max="1.5" step="0.05" value="1" />
+          <span id="control-size-value">1.00</span>
+        </div>
+        <h3 class="keybind-heading">Keybinds <button id="reset-keybinds-btn" class="menu-btn small-btn">Reset</button></h3>
+        <div id="keybind-list" class="keybind-list"></div>
+      </div>
+
+      <button class="menu-btn back-btn" data-nav="main">Back</button>
+    </div>
+  </div>
+
+  <!-- ============ HUD (in-match) ============ -->
+  <div id="hud" class="hidden">
+    <div id="vignette"></div>
+    <div id="crosshair"><span></span><span></span><span></span><span></span></div>
+    <div id="hit-marker"></div>
+    <div id="scope-overlay" class="hidden">
+      <div class="scope-circle">
+        <div class="scope-cross scope-h"></div>
+        <div class="scope-cross scope-v"></div>
+        <div class="scope-dot"></div>
+      </div>
+    </div>
+
+    <div id="top-bar">
+      <div id="mode-label"></div>
+      <div id="timer">00:00</div>
+      <div id="score-display"></div>
+    </div>
+
+    <div id="storm-warning" class="hidden">Storm closing in!</div>
+
+    <div id="bottom-left">
+      <div class="bar-group">
+        <div class="bar-label">HP</div>
+        <div class="bar-outer health-bar"><div id="health-fill" class="bar-fill"></div></div>
+        <span id="health-value">100</span>
+      </div>
+      <div class="bar-group">
+        <div class="bar-label">SHD</div>
+        <div class="bar-outer shield-bar"><div id="shield-fill" class="bar-fill"></div></div>
+        <span id="shield-value">0</span>
+      </div>
+      <div id="resource-counter">🧱 <span id="resource-value">0</span></div>
+    </div>
+
+    <div id="bottom-right">
+      <div id="weapon-name"></div>
+      <div id="ammo-counter"><span id="ammo-mag">0</span> / <span id="ammo-reserve">0</span></div>
+      <div id="weapon-slots"></div>
+    </div>
+
+    <div id="build-bar" class="hidden">
+      <div class="build-slot" data-piece="wall">1<br />Wall</div>
+      <div class="build-slot" data-piece="ramp">2<br />Ramp</div>
+      <div class="build-slot" data-piece="platform">3<br />Platform</div>
+    </div>
+
+    <div id="kill-feed"></div>
+    <div id="checkpoint-toast" class="hidden"></div>
+    <div id="xp-toast" class="hidden"></div>
+
+    <div id="player-count"></div>
+  </div>
+
+  <!-- ============ RESULTS ============ -->
+  <div id="results-screen" class="screen hidden">
+    <div class="menu-panel wide">
+      <h2 id="results-title">Match Complete</h2>
+      <div id="results-list"></div>
+      <button class="menu-btn primary" data-nav="main">Continue</button>
+    </div>
+  </div>
+
+  <!-- ============ MOBILE CONTROLS ============ -->
+  <div id="mobile-controls" class="hidden">
+    <div id="joystick-move" class="joystick"><div class="joystick-knob"></div></div>
+    <div id="joystick-look" class="joystick-look-zone"></div>
+    <div id="mobile-buttons">
+      <button id="btn-jump" class="mbtn">JUMP</button>
+      <button id="btn-slide" class="mbtn">SLIDE</button>
+      <button id="btn-crouch" class="mbtn">CROUCH</button>
+      <button id="btn-sprint" class="mbtn toggle">SPRINT</button>
+      <button id="btn-reload" class="mbtn">RELOAD</button>
+      <button id="btn-build" class="mbtn">BUILD</button>
+      <button id="btn-ads" class="mbtn">AIM</button>
+      <button id="btn-fire" class="mbtn fire">FIRE</button>
+    </div>
+    <div id="mobile-weapon-switch">
+      <button class="mbtn small" data-slot="0">1</button>
+      <button class="mbtn small" data-slot="1">2</button>
+      <button class="mbtn small" data-slot="2">3</button>
+    </div>
+  </div>
+
+  <div id="connection-status" class="hidden">Connecting...</div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "/vendor/three.module.js",
+      "three/addons/": "/vendor/addons/"
+    }
+  }
+  </script>
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>

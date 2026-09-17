@@ -1,0 +1,22 @@
+{
+  "p_t8wuve0dx7mu4d54jy": {
+    "xp": 0,
+    "level": 1,
+    "coins": 150,
+    "kills": 0,
+    "deaths": 0,
+    "wins": 0,
+    "matchesPlayed": 0,
+    "unlocked": [
+      "default_outfit",
+      "default_skin",
+      "default_trail"
+    ],
+    "equipped": {
+      "outfit": "default_outfit",
+      "weaponSkin": "default_skin",
+      "trail": "default_trail",
+      "emote": null
+    }
+  }
+}
