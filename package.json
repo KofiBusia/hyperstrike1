@@ -1,0 +1,19 @@
+{
+  "name": "hyper-strike",
+  "version": "0.1.0",
+  "description": "Hyper Strike - original fast-paced multiplayer parkour shooter",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5",
+    "three": "^0.160.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
